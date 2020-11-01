@@ -1,0 +1,11 @@
+name: Dummy
+on:
+  push:
+  status:
+
+jobs:
+
+  dummy:
+    runs-on: ubuntu-latest
+    steps:
+    - run: echo "Hi!"

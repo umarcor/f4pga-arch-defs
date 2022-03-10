@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
 
-  Run-tests:
+  Test:
     container: ubuntu:bionic
 
     runs-on: [self-hosted, Linux, X64]
@@ -20,16 +20,30 @@ jobs:
 
     steps:
 
-    - uses: actions/checkout@v2
-      with:
-        submodules: recursive
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
 
-    - name: Execute test script
-      run: stdbuf -i0 -o0 -e0 ./.github/ci/${{ matrix.test }}.sh
+      - name: Execute test script
+        run: stdbuf -i0 -o0 -e0 ./.github/ci/${{ matrix.test }}.sh
 
-    - uses: actions/upload-artifact@v2
-      if: ${{ always() }}
-      with:
-        path: |
-          **/results*.gz
-          **/plot_*.svg
+      - uses: actions/upload-artifact@v2
+        if: ${{ always() }}
+        with:
+          path: |
+            **/results*.gz
+            **/plot_*.svg
+
+  Automerge:
+    needs: Test
+    if: github.event_name == 'pull_request' && github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    name: Automerge dependabot PRs
+    permissions:
+    #  pull-requests: write
+      contents: write
+
+    steps:
+
+      - name: Auto-merge Dependabot PR
+        run: GITHUB_TOKEN='${{ github.token }}' gh pr merge --merge '${{ github.event.pull_request.html_url }}'

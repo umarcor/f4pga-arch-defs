@@ -5,9 +5,10 @@ on: [push, pull_request]
 jobs:
 
   Test:
-    container: ubuntu:bionic
+    #container: ubuntu:bionic
 
-    runs-on: [self-hosted, Linux, X64]
+    #runs-on: [self-hosted, Linux, X64]
+    runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
@@ -24,15 +25,15 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Execute test script
-        run: stdbuf -i0 -o0 -e0 ./.github/ci/${{ matrix.test }}.sh
-
-      - uses: actions/upload-artifact@v2
-        if: ${{ always() }}
-        with:
-          path: |
-            **/results*.gz
-            **/plot_*.svg
+#      - name: Execute test script
+#        run: stdbuf -i0 -o0 -e0 ./.github/ci/${{ matrix.test }}.sh
+#
+#      - uses: actions/upload-artifact@v2
+#        if: ${{ always() }}
+#        with:
+#          path: |
+#            **/results*.gz
+#            **/plot_*.svg
 
   Automerge:
     needs: Test

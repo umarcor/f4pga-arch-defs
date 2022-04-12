@@ -3,7 +3,7 @@
 INSTALL_DIR="$(pwd)/install"
 mkdir -p $INSTALL_DIR
 
-export CMAKE_FLAGS="-GNinja -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} -DINSTALL_FAMILIES=xc7"
+export CMAKE_FLAGS="-GNinja -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} -DINSTALL_FAMILIES=xc7 -DINSTALL_DEVICES=xc7a35t,xc7a50t"
 source $(dirname "$0")/setup-and-activate.sh
 
 heading "Installing gsutil"
